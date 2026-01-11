@@ -1,5 +1,5 @@
 export async function fetchNavigation() {
-  const res = await fetch('http://localhost:4000/navigation', {
+  const res = await fetch('http://localhost:8080/navigation', {
     cache: 'no-store',
   });
 
@@ -16,7 +16,7 @@ export async function fetchCategoryProducts(
   limit = 20,
 ) {
   const res = await fetch(
-    `http://localhost:4000/navigation/${slug}/products?page=${page}&limit=${limit}`,
+    `http://localhost:8080/navigation/${slug}/products?page=${page}&limit=${limit}`,
     { cache: 'no-store' },
   );
 
@@ -28,7 +28,7 @@ export async function fetchCategoryProducts(
 }
 
 export async function fetchProductById(id: number) {
-  const res = await fetch(`http://localhost:4000/products/${id}`, {
+  const res = await fetch(`http://localhost:8080/products/${id}`, {
     cache: 'no-store',
   });
 
@@ -38,3 +38,4 @@ export async function fetchProductById(id: number) {
 
   return res.json();
 }
+
