@@ -9,13 +9,10 @@ async function bootstrap() {
     credentials: true,
   });
 
- const port = process.env.PORT || 4000;
- await app.listen(port);
+  const port = process.env.PORT || 4000;
+  await app.listen(port);
 
-
-  console.log(`🚀 Backend running on http://localhost:${port}/navigation`);
+  console.log(`🚀 Backend running on port ${port}`);
 }
+
 bootstrap();
-
-
-
