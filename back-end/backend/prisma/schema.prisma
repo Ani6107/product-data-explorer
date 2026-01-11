@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Navigation {
+  id            Int       @id @default(autoincrement())
+  title         String
+  slug          String    @unique
+  lastScrapedAt DateTime?
+  createdAt     DateTime  @default(now())
+
+  products Product[] // ✅ inverse relation
+}
+
+model Product {
+  id            Int       @id @default(autoincrement())
+  sourceId      String    @unique
+  title         String
+  author        String?
+  price         Float
+  currency      String
+  imageUrl      String?
+  sourceUrl     String    @unique
+  lastScrapedAt DateTime?
+  createdAt     DateTime  @default(now())
+
+  // ✅ Navigation relation (SOURCE OF TRUTH)
+  navigation   Navigation @relation(fields: [navigationId], references: [id])
+  navigationId Int
+
+  // ✅ One-to-one detail
+  detail ProductDetail?
+
+  // ✅ One-to-many reviews
+  reviews Review[]
+}
+
+model ProductDetail {
+  id           Int      @id @default(autoincrement())
+  description  String?
+  specs        Json?
+  ratingsAvg   Float?
+  reviewsCount Int?
+  createdAt    DateTime @default(now())
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @unique
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  author    String?
+  rating    Int?
+  text      String?
+  createdAt DateTime @default(now())
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+model ScrapeJob {
+  id         Int       @id @default(autoincrement())
+  targetUrl  String
+  targetType String
+  status     String
+  startedAt  DateTime?
+  finishedAt DateTime?
+  errorLog   String?
+}
+
+model ViewHistory {
+  id        Int      @id @default(autoincrement())
+  sessionId String
+  pathJson  Json
+  createdAt DateTime @default(now())
+}
