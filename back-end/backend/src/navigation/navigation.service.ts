@@ -7,8 +7,18 @@ export class NavigationService {
   constructor(private prisma: PrismaService) {}
 
   async getNavigation() {
-    return this.prisma.navigation.findMany();
+  try {
+    const navigation = await this.prisma.navigation.findMany({
+      orderBy: { id: 'asc' },
+    });
+
+    return navigation ?? [];
+  } catch (error) {
+    console.error('❌ Navigation fetch failed:', error);
+    return [];
   }
+}
+
 
   async getProductsByNavigation(
     slug: string,
@@ -39,3 +49,4 @@ export class NavigationService {
     };
   }
 }
+
